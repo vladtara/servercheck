@@ -2,6 +2,8 @@ import click
 import json
 import sys
 
+from .http import ping_servers
+
 
 @click.command(no_args_is_help=True)
 @click.option(
@@ -23,7 +25,16 @@ def cli(filename, server):
     if server:
         {data.add(i) for i in server}
 
-    click.echo(f"Data: {data}")
+    results = ping_servers(data)
+    print("Successful Connections")
+    print("---------------------")
+    for server in results["success"]:
+        print(server)
+
+    print("\n Failed Connections")
+    print("------------------")
+    for server in results["failure"]:
+        print(server)
 
 
 if __name__ == "__main__":
